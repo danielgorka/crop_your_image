@@ -296,16 +296,21 @@ class _CropEditorState extends State<_CropEditor> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.all(padding),
+        Positioned(
+          left: _imageRect.left + padding,
+          top: _imageRect.top + padding,
           child: IgnorePointer(
             child: ClipPath(
               clipper: _withCircleUi
-                  ? _CircleCropAreaClipper(_rect)
-                  : _CropAreaClipper(_rect),
+                  ? _CircleCropAreaClipper(
+                      _rect.translate(-_imageRect.left, -_imageRect.top),
+                    )
+                  : _CropAreaClipper(
+                      _rect.translate(-_imageRect.left, -_imageRect.top),
+                    ),
               child: Container(
-                width: double.infinity,
-                height: double.infinity,
+                width: _imageRect.width,
+                height: _imageRect.height,
                 color: widget.maskColor ?? Colors.black.withAlpha(100),
               ),
             ),
