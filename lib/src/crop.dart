@@ -301,8 +301,8 @@ class _CropEditorState extends State<_CropEditor> {
           child: IgnorePointer(
             child: ClipPath(
               clipper: _withCircleUi
-                  ? _CircleCropAreaClipper(_rect.translate(padding, padding))
-                  : _CropAreaClipper(_rect.translate(padding, padding)),
+                  ? _CircleCropAreaClipper(_rect)
+                  : _CropAreaClipper(_rect),
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
