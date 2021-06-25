@@ -1,5 +1,7 @@
 part of crop_your_image;
 
+const padding = 8.0;
+
 const dotTotalSize = 32.0; // fixed corner dot size.
 
 typedef CornerDotBuilder = Widget Function(double size, int cornerIndex);
@@ -80,7 +82,10 @@ class Crop extends StatelessWidget {
     return LayoutBuilder(
       builder: (c, constraints) {
         final newData = MediaQuery.of(c).copyWith(
-          size: constraints.biggest,
+          size: Size(
+            constraints.biggest.width - 2 * padding,
+            constraints.biggest.height - 2 * padding,
+          ),
         );
         return MediaQuery(
           data: newData,
@@ -277,21 +282,25 @@ class _CropEditorState extends State<_CropEditor> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
-        Container(
-          color: widget.baseColor,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Image.memory(
-            widget.image,
-            fit: _isFitVertically ? BoxFit.fitHeight : BoxFit.fitWidth,
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Container(
+            color: widget.baseColor,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Image.memory(
+              widget.image,
+              fit: _isFitVertically ? BoxFit.fitHeight : BoxFit.fitWidth,
+            ),
           ),
         ),
         IgnorePointer(
           child: ClipPath(
             clipper: _withCircleUi
-                ? _CircleCropAreaClipper(_rect)
-                : _CropAreaClipper(_rect),
+                ? _CircleCropAreaClipper(_rect.translate(padding, padding))
+                : _CropAreaClipper(_rect.translate(padding, padding)),
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -300,8 +309,8 @@ class _CropEditorState extends State<_CropEditor> {
           ),
         ),
         Positioned(
-          left: _rect.left,
-          top: _rect.top,
+          left: _rect.left + padding,
+          top: _rect.top + padding,
           child: GestureDetector(
             onPanUpdate: (details) {
               rect = calculator.moveRect(
@@ -319,8 +328,8 @@ class _CropEditorState extends State<_CropEditor> {
           ),
         ),
         Positioned(
-          left: _rect.left - (dotTotalSize / 2),
-          top: _rect.top - (dotTotalSize / 2),
+          left: _rect.left - (dotTotalSize / 2) + padding,
+          top: _rect.top - (dotTotalSize / 2) + padding,
           child: GestureDetector(
             onPanUpdate: (details) {
               rect = calculator.moveTopLeft(
@@ -336,8 +345,8 @@ class _CropEditorState extends State<_CropEditor> {
           ),
         ),
         Positioned(
-          left: _rect.right - (dotTotalSize / 2),
-          top: _rect.top - (dotTotalSize / 2),
+          left: _rect.right - (dotTotalSize / 2) + padding,
+          top: _rect.top - (dotTotalSize / 2) + padding,
           child: GestureDetector(
             onPanUpdate: (details) {
               rect = calculator.moveTopRight(
@@ -353,8 +362,8 @@ class _CropEditorState extends State<_CropEditor> {
           ),
         ),
         Positioned(
-          left: _rect.left - (dotTotalSize / 2),
-          top: _rect.bottom - (dotTotalSize / 2),
+          left: _rect.left - (dotTotalSize / 2) + padding,
+          top: _rect.bottom - (dotTotalSize / 2) + padding,
           child: GestureDetector(
             onPanUpdate: (details) {
               rect = calculator.moveBottomLeft(
@@ -370,8 +379,8 @@ class _CropEditorState extends State<_CropEditor> {
           ),
         ),
         Positioned(
-          left: _rect.right - (dotTotalSize / 2),
-          top: _rect.bottom - (dotTotalSize / 2),
+          left: _rect.right - (dotTotalSize / 2) + padding,
+          top: _rect.bottom - (dotTotalSize / 2) + padding,
           child: GestureDetector(
             onPanUpdate: (details) {
               rect = calculator.moveBottomRight(
