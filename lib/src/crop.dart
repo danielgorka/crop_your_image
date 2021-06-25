@@ -285,7 +285,7 @@ class _CropEditorState extends State<_CropEditor> {
       clipBehavior: Clip.none,
       children: [
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(padding),
           child: Container(
             color: widget.baseColor,
             width: MediaQuery.of(context).size.width,
@@ -296,15 +296,18 @@ class _CropEditorState extends State<_CropEditor> {
             ),
           ),
         ),
-        IgnorePointer(
-          child: ClipPath(
-            clipper: _withCircleUi
-                ? _CircleCropAreaClipper(_rect.translate(padding, padding))
-                : _CropAreaClipper(_rect.translate(padding, padding)),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: widget.maskColor ?? Colors.black.withAlpha(100),
+        Padding(
+          padding: EdgeInsets.all(padding),
+          child: IgnorePointer(
+            child: ClipPath(
+              clipper: _withCircleUi
+                  ? _CircleCropAreaClipper(_rect.translate(padding, padding))
+                  : _CropAreaClipper(_rect.translate(padding, padding)),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: widget.maskColor ?? Colors.black.withAlpha(100),
+              ),
             ),
           ),
         ),
